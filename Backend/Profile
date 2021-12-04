@@ -1,1 +1,0 @@
-web: gunicorn hungerwarrior.wsgi.py --log-file - 
