@@ -9,7 +9,16 @@ export let displayOrders = () => {};
 const Orders = (props) => {
   const { orders } = props;
 
+  const sortOrders = (orders) => {
+    orders.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date)
+    })
+    return orders;
+  }
+
+
   displayOrders = (orders, num_items = "") => {
+    orders = sortOrders(orders); 
     if (num_items === "") {
       num_items = orders.length;
     }
@@ -20,13 +29,14 @@ const Orders = (props) => {
           item
           xs={3}
           style={{ display: "inline-flex", marginRight: "10px" }}
+          key = {order.id}
         >
           <MediaCard
             name={order.name}
             store_email={order.store_email}
             store_name={order.store_name}
             quantity={order.quantity}
-            date_posted={order.ordered_date}
+            date_posted={order.date}
             available="Not Applicable"
             id={order.id}
             type="order"

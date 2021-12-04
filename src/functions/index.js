@@ -1,4 +1,5 @@
 import fire from "../fire";
+import Geocode from "react-geocode";
 
 const db = fire.firestore();
 
@@ -25,7 +26,7 @@ export const handleLogin2 = async (
   setIsUser,
   setUser
 ) => {
-  await fetch(`http://localhost:8000/login/`, {
+  await fetch(`https://hungerwarriorapi.herokuapp.com/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +44,7 @@ export const handleLogin2 = async (
 };
 
 export const getUserDetails = (email, setUserDetails) => {
-  fetch(`http://localhost:8000/users?email=${email}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/users?email=${email}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -55,7 +56,7 @@ export const getUserDetails = (email, setUserDetails) => {
 
 export const getAllListings2 = (email = "", setListings) => {
   if (!email) {
-    fetch("http://localhost:8000/listings", {
+    fetch("https://hungerwarriorapi.herokuapp.com/listings", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +65,7 @@ export const getAllListings2 = (email = "", setListings) => {
       .then((resp) => resp.json())
       .then((resp) => setListings(resp));
   } else {
-    fetch(`http://localhost:8000/listings?email=${email}`, {
+    fetch(`https://hungerwarriorapi.herokuapp.com/listings?email=${email}`, {
       method : "GET",
       headers : {
         "Content-Type" : "application/json",
@@ -76,7 +77,7 @@ export const getAllListings2 = (email = "", setListings) => {
 };
 
 export const getOrders2 = async (email, setOrders) => {
-  fetch(`http://localhost:8000/orders?email=${email}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/orders?email=${email}`, {
     method : "GET",
     headers: {
       "Content-Type" : "application/json"
@@ -85,8 +86,7 @@ export const getOrders2 = async (email, setOrders) => {
 };
 
 export const getAllStores2 = async (setStores) => {
-  let results; 
-  fetch('http://localhost:8000/users', {
+  fetch('https://hungerwarriorapi.herokuapp.com/users?role=Store', {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -94,9 +94,27 @@ export const getAllStores2 = async (setStores) => {
   }).then((resp) => resp.json()).then(resp => setStores(resp)); 
 }
 
+export const getAllShelters = async (setShelters) => {
+  fetch('https://hungerwarriorapi.herokuapp.com/users?role=Shelter', {
+    method : "GET",
+    headers : {
+      "Content-Type" : "application/json"
+    }
+  }).then((resp) => resp.json()).then(resp => setShelters(resp));
+}
+
+export const getTotalValue = async (email, setTotalValue) => {
+  fetch(`https://hungerwarriorapi.herokuapp.com/totalValue?email=${email}`,{
+    method : "GET", 
+    headers : {
+      "Content-Type" : "application/json"
+    },
+  }).then((resp) => resp.json()).then(resp => setTotalValue(resp)); 
+}
+
 export const getRequests2 = async (email, setRequests) => {
   // access the `requests` table in our database
-  fetch(`http://localhost:8000/requests?email=${email}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/requests?email=${email}`, {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -105,7 +123,7 @@ export const getRequests2 = async (email, setRequests) => {
 }
 
 export const handleNewRequest2 = async (request_details) => {
-  fetch(`http://localhost:8000/requests/`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/requests/`, {
     method : "POST",
     headers : {
       "Content-Type" : "application/json"
@@ -115,7 +133,7 @@ export const handleNewRequest2 = async (request_details) => {
 }
 
 export const getListingById2 = async (id, setListing) => {
-  fetch(`http://localhost:8000/listings?id=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/listings?id=${id}`, {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -124,7 +142,7 @@ export const getListingById2 = async (id, setListing) => {
 }
 
 export const getRequestById2 = async (id, setRequest) => {
-  fetch(`http://localhost:8000/requests?id=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/requests?id=${id}`, {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -133,7 +151,7 @@ export const getRequestById2 = async (id, setRequest) => {
 }
 
 export const getOrder2 = async (id, setOrder) => {
-  fetch(`http://localhost:8000/orders?id=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/orders?id=${id}`, {
     method :  "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -143,7 +161,7 @@ export const getOrder2 = async (id, setOrder) => {
 
 
 export const handleNewListing2 = async(listing_details) => {
-  fetch(`http://localhost:8000/listings/`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/listings/`, {
     method : 'POST',
     headers : {
       "Content-Type" : "application/json"
@@ -154,7 +172,7 @@ export const handleNewListing2 = async(listing_details) => {
 
 export const handleNewOrder2 = async(order_details) => {
   
-  fetch(`http://localhost:8000/orders/`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/orders/`, {
     method : "POST",
     headers : {
       "Content-Type" : "application/json" 
@@ -164,7 +182,7 @@ export const handleNewOrder2 = async(order_details) => {
 }
 
 export const handleStatusChange2 = async (id, newStatus) => {
-  fetch(`http://localhost:8000/orders/?id=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/orders/?id=${id}`, {
     method : "PUT",
     headers : {
       "Content-Type" : "application/json"
@@ -173,8 +191,21 @@ export const handleStatusChange2 = async (id, newStatus) => {
   }).then((resp) => resp.json())
 }
 
+export const handleDelivererStatusChange = async (id, name, phone) => {
+  fetch(`https://hungerwarriorapi.herokuapp.com/orders/?id=${id}&deliverer=True/`, {
+    method : "PUT",
+    headers : {
+      "Content-Type" : "application/json"
+    },
+    body : JSON.stringify({
+      name : name,
+      phone : phone
+    })
+  }).then((resp) => resp.json()); 
+}
+
 export const deleteRequest2 = async (id) => {
-  fetch(`http://localhost:8000/requests/?delete=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/requests/?delete=${id}`, {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -183,7 +214,7 @@ export const deleteRequest2 = async (id) => {
 }
 
 export const deleteListing2 = async (id) => {
-  fetch(`http://localhost:8000/listings/?delete=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/listings/?delete=${id}`, {
     method : "GET",
     headers : {
       "Content-Type" : "application/json"
@@ -192,7 +223,7 @@ export const deleteListing2 = async (id) => {
 }
 
 export const handleRequestStatusChange2 = async (id, newStatus) => {
-  fetch(`http://localhost:8000/requests/?id=${id}`, {
+  fetch(`https://hungerwarriorapi.herokuapp.com/requests/?id=${id}`, {
     method : "PUT",
     headers : {
       "Content-Type" : "application/json"
@@ -201,10 +232,6 @@ export const handleRequestStatusChange2 = async (id, newStatus) => {
   }).then((resp) => resp.json())
 }
  
-export const handleRequestStatusChange = async (id, newStatus) => {
-  return db.doc(`/requests/${id}`).update("request_status", newStatus);
-};
-
 
 export const handleLogin = (email, password) => {
   //clearErrors();
@@ -230,19 +257,8 @@ export const handleLogin = (email, password) => {
 };
 
 let token, userId;
-/*
-    Function to handle user sign up. 
-    Parameters: 
-    1. name : User's name
-    2. location : User's location 
-    3. phone : User's phone 
-    4. type : User's type (store/shelter)
-    5. email : User's email 
-    6. password : User's password 
-    7. setEmailError : State function to change/edit the state variable 'emailError'. Used when the email entered is invalid.
-    8. setPasswordError :  State function to change/edit the state variable 'passwordError'. Used when the password entered is invalid.
-  */
-export const handleSignUp = (
+
+export const handleSignUp = async (
   name,
   location,
   phone,
@@ -251,41 +267,56 @@ export const handleSignUp = (
   image,
   password,
   setEmailError,
-  setPasswordError
+  setPasswordError,
+  setSignUpStatus
 ) => {
   // authenticate with fireabase
-  fire
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .catch((err) => {
-      switch (err.code) {
-        case "auth/email-already-in-use":
-        case "auth/invalid-email":
-          setEmailError(err.message);
-          break;
-        case "auth/weak-password":
-          setPasswordError(err.message);
-          break;
-      }
+
+  let userCredentials; 
+
+  let latlng = {}
+
+  await Geocode.fromAddress(location).then((response) => {
+    
+    const {lat, lng} = response.results[0].geometry.location;  
+    
+    latlng = {
+      latitude : lat,
+      longitude : lng
+    }
+  })  
+
+  userCredentials = {
+    name: name,
+    location: location,
+    phone: phone,
+    type: type,
+    email: email,
+    userId: userId,
+    image: image,
+    latitude : latlng.latitude, 
+    longitude : latlng.longitude
+  }
+
+  await fetch(`https://hungerwarriorapi.herokuapp.com/signup/`, {
+    method : "POST",
+    headers : {
+      "Content-Type" : "application/json"
+    },
+    body : JSON.stringify({
+      'email' : email,
+      'password' : password
     })
-    .then((data) => {
-      userId = data.user.uid;
-      return data.user.getIdToken();
-    })
-    .then((token) => {
-      token = token;
-      const userCredentials = {
-        name: name,
-        location: location,
-        phone: phone,
-        type: type,
-        email: email,
-        userId: userId,
-        image: image,
-      };
-      return db.doc(`/users/${email}`).set(userCredentials);
-    });
-};
+  })
+  .then(
+    fetch('https://hungerwarriorapi.herokuapp.com/users/',{
+      method : 'POST',
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify(userCredentials)
+    })).then(setSignUpStatus(true))
+  };
 
 /*
     Function to handle user logout. 

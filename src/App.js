@@ -2,12 +2,18 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import fire from "./fire";
 import Login from "./components/Login";
-import HomePage from "./components/Dashboard";
-import { getAllStores, getUserDetails, getAllStores2 } from "./functions/index";
+import {
+  getAllStores,
+  getUserDetails,
+  getAllStores2,
+  getAllShelters,
+} from "./functions/index";
 import ViewOrder from "./components/Shelter/ViewOrder";
 import { ViewOrder as ViewOrderForStore } from "./components/Store/ViewOrder";
 import Profile from "./components/Store/Profile";
 import CreateListing from "./components/Store/CreateNewListing";
+import ShelterFinancials from "./components/Shelter/Financials";
+import StoreFinancials from "./components/Store/Financials";
 
 // backend
 import {
@@ -18,10 +24,9 @@ import {
 } from "./functions/index";
 import StoreHome from "./components/Store/StoreHome";
 import ShelterHome from "./components/Shelter/ShelterHome";
-import Tax from "./components/Tax";
-import History from "./components/History";
 import CreateRequest from "./components/Shelter/CreateRequest";
 import CreateNewOrder from "./components/Shelter/CreateNewOrder";
+import Match from "./components/Shelter/Match";
 
 import {
   BrowserRouter as Router,
@@ -34,6 +39,7 @@ import AllListings from "./components/AllListings";
 import AllOrders from "./components/AllOrders";
 import ViewRequest from "./components/Store/ViewRequest";
 import AllRequests from "./components/AllRequests";
+import ReactDOM from "react-dom";
 
 // function
 const App = () => {
@@ -50,6 +56,7 @@ const App = () => {
   const [passwordError, setPasswordError] = useState("");
   const [hasAccount, setHasAccount] = useState(false);
   const [stores, setStores] = useState([{}]);
+  const [shelters, setShelters] = useState([{}]);
   const [loading, setLoading] = useState(true);
   const [isUser, setIsUser] = useState(false);
 
@@ -66,9 +73,10 @@ const App = () => {
   };
 
   //useEffect runs as soon as the page loads
-  useEffect(() => {
-    authListener(setUser, setLoading, setUserDetails);
-    getAllStores2(setStores);
+  useEffect(async () => {
+    await authListener(setUser, setLoading, setUserDetails);
+    await getAllStores2(setStores);
+    await getAllShelters(setShelters);
     // check if a user is already logged in so that we know which page to display
   }, []);
 
@@ -108,13 +116,10 @@ const App = () => {
       ) : userDetails.type === "Shelter" ? (
         <Router>
           <Switch>
-            <Route path="/tax" component={withRouter(Tax)} />
-            <Route path="/history" component={withRouter(History)} />
             <Route
-              exact
-              path="/order/:id"
+              path="/financials"
               component={() => (
-                <CreateNewOrder
+                <ShelterFinancials
                   userDetails={userDetails}
                   handleLogout={handleLogout}
                 />
@@ -152,6 +157,13 @@ const App = () => {
               )}
             />
             <Route
+              path="/match"
+              component={() => (
+                <Match userDetails={userDetails} stores={stores} />
+              )}
+            />
+
+            <Route
               path="/allRequests"
               component={() => (
                 <AllRequests
@@ -182,15 +194,12 @@ const App = () => {
       ) : (
         <Router>
           <Switch>
-            <Route path="/tax" component={withRouter(Tax)} />
-            <Route path="/history" component={withRouter(History)} />
             <Route
-              path="/allOrders"
+              path="/financials"
               component={() => (
-                <AllOrders
+                <StoreFinancials
                   userDetails={userDetails}
                   handleLogout={handleLogout}
-                  role="Store"
                 />
               )}
             />
@@ -202,6 +211,7 @@ const App = () => {
                   user={user}
                   handleLogout={handleLogout}
                   userDetails={userDetails}
+                  shelters={shelters}
                 />
               )}
             />
